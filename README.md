@@ -28,28 +28,33 @@ For example:
 
 root@name:~#lspci -k
 
-03:00.0 Network controller: Intel Corporation Wireless 3165 (rev 81)
-	Subsystem: Intel Corporation Dual Band Wireless AC 3165
-	Kernel driver in use: iwlwifi
-	Kernel modules: iwlwifi 
+Network controller: Intel Corporation Wireless 3165 (rev 81)
+
+Subsystem: Intel Corporation Dual Band Wireless AC 3165
+
+Kernel driver in use: iwlwifi
+
+Kernel modules: iwlwifi 
 
 So, my wifi card working on iwlwifi firmware. 
 
 Next step is to check if this firmware exist in the system. 
-Go to page https://www.intel.com/content/www/us/en/support/articles/000005511/network-and-i-o/wireless-networking.html and find iwlwifi firmware 
-for your Network controller (in my case it is Intel Wireless AC 3165 and iwlwifi-7265-ucode which is equal to 3165 firmware).
-Check /lib/firmware/ folder to make shure that firmware exist. if so, check if it is downloaded with "lsmod | grep iwl" command. (Replace "iwl" with your module).
-If nothing is shown it means that driver for your wifi card firmware is not presented in the system. In order to find what driver is missing run "modinfo iwlwifi" and look at the "depends" line. In my output it was cfg80211 driver.  "Dpkg -S cfg80211" command shows you that driver is located in /lib/modules/4.19.0-5-amd64/kernel/net/wireless/ folder. If folder is empty you need download and install driver.  
+
+Go to page https://www.intel.com/content/www/us/en/support/articles/000005511/network-and-i-o/wireless-networking.html and find iwlwifi firmware for your Network controller (in my case it is Intel Wireless AC 3165 and iwlwifi-7265-ucode which is equal to 3165 firmware).
+
+Check /lib/firmware/ folder to make shure that firmware exist. if so, check if it is downloaded with "lsmod | grep iwl" command. (Replace "iwl" with your module).If nothing is shown it means that driver for your wifi card firmware is not presented in the system. In order to find what driver is missing run "modinfo iwlwifi" and look at the "depends" line. In my output it was cfg80211 driver.  "Dpkg -S cfg80211" command shows you that driver is located in /lib/modules/4.19.0-5-amd64/kernel/net/wireless/ folder. If folder is empty you need download and install driver.  
 
 The easiest way to install missing drivers is reinstalling kernel via Synaptic. To find kernel images run "apt-cache search linux-image". 
 
 root@name:~# apt-cache search linux-image
+
 linux-image-4.19.0-5-amd64 - Linux 4.19 for 64-bit PCs (signed)
+
 linux-image-amd64 - Linux for 64-bit PCs (meta-package)
+
 linux-headers-4.19.0-5-amd64 - Header files for Linux 4.19.0-5-amd64
 
-Now open Synaptic and run in search box "linux-image" keyword. THe result was three packages shown above. You need reinstall only two of them: linux-image-4.19.0-5-amd64 - Linux 4.19 for 64-bit PCs (signed)
-and linux-image-amd64 - Linux for 64-bit PCs (meta-package).
+Now open Synaptic and run in search box "linux-image" keyword. THe result was three packages shown above. You need reinstall only two of them: linux-image-4.19.0-5-amd64 - Linux 4.19 for 64-bit PCs (signed) and linux-image-amd64 - Linux for 64-bit PCs (meta-package).
 
 Then check again if firmware and driver for your wifi card is presented in system.
 
