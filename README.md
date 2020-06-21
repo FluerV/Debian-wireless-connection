@@ -59,9 +59,13 @@ Now open Synaptic and run in search box "linux-image" keyword. THe result was th
 Then check again if firmware and driver for your wifi card is presented in system.
 
 root@name:~# lsmod | grep iwl
+
 iwlmvm                299008  0
+
 mac80211              815104  1 iwlmvm
+
 iwlwifi               241664  1 iwlmvm
+
 cfg80211              761856  3 iwlmvm,iwlwifi,mac80211
 
 So, you can see that iwlwifi firmware and cfg80211 driver are installed and downloaded. 
@@ -103,23 +107,32 @@ root@name:~# su -l -c "wpa_passphrase myssid my_very_secret_passphrase > /etc/wp
 The above command gives the following output to "/etc/wpa_supplicant/wpa_supplicant.conf":
 
 network={
+
         ssid="myssid"
+	
         #psk="my_very_secret_passphrase"
+	
         psk=numbers
 }
 
 Since wpa_supplicant v2.6, you need to add following in your /etc/wpa_supplicant/wpa_supplicant.conf in order to function sudo wpa_cli:
 
 ctrl_interface=/run/wpa_supplicant 
+
 update_config=1
 
 I have the following wpa_supplicant.conf file:
 
 ctrl_interface=/run/wpa_supplicant
+
 update_config=1
+
 network={
+
 	ssid="MySSID"
-	#psk="parola"
+	
+	#psk="my_very_secret_passphrase"
+	
 	psk=numbers
 }
 
@@ -131,28 +144,44 @@ You'll need to copy from "psk=" to the end of the line, to put in your /etc/netw
 It's better to set up static IP address. Let's edit /etc/network/interfaces file:
 
 #The loopback network interface
+
 auto lo
+
 iface lo inet loopback
 
 #The primary network interface
+
 auto wlo1
+
 allow-hotplug wlan0
+
 iface wlo1 inet static
+
         address 192.168.1.15
+	
         netmask 255.255.255.0
+	
         network 192.168.1.0
+	
         gateway 192.168.1.1
+	
         broadcast 192.168.255.255
+	
         dns-nameservers 192.168.1.1
+	
         #dns-nameservers 8.8.8.8 8.8.4.4
+	
         wpa-ssid myssid
+	
         wpa-psk numbers
 
 
 3.5 Connect to the internet:
 
 sudo systemctl reenable wpa_supplicant.service
+
 sudo systemctl restart wpa_supplicant.service
+
 sudo wpa_supplicant -B -Dwext -i <interface> -c/etc/wpa_supplicant/wpa_supplicant.conf
 
 I noticed that it's better don't make a daemon (don't add "B"). It's causing errors.
@@ -163,20 +192,26 @@ I noticed that it's better don't make a daemon (don't add "B"). It's causing err
 If you prefer dynamic IP your /etc/network/interfaces file should look like that: 
 
 #The loopback network interface
+
 auto lo
+
 iface lo inet loopback
 
 #The primary network interface
+
 auto wlo1
+
 allow-hotplug wlan0
+
 iface wlan0 inet dhcp
+
         wpa-ssid myssid
+	
         wpa-psk numbers
 
 Add "sudo systemctl restart "dhcpcd.service" line after "sudo systemctl restart wpa_supplicant.service"
 
-But I noticed that ISP can provide the same dhcp address for a long time (about a year or even more). In documents of your ISP you can read that dhcp address is changing every 12-24 houres.
-But in reality it has the different behavour. So, having dhcp address is nonsensical and non-stable. 
+But I noticed that ISP can provide the same dhcp address for a long time (about a year or even more). In documents of your ISP you can read that dhcp address is changing every 12-24 houres. But in reality it has the different behavour. So, having dhcp address is nonsensical and non-stable. 
 
 Reboot! You can run "systemctl restart networking" but it's not enough in some cases.  
 
