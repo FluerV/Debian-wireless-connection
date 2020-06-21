@@ -29,11 +29,8 @@ For example:
 root@name:~#lspci -k
 
 03:00.0 Network controller: Intel Corporation Wireless 3165 (rev 81)
-
 	Subsystem: Intel Corporation Dual Band Wireless AC 3165
-	
 	Kernel driver in use: iwlwifi
-	
 	Kernel modules: iwlwifi 
 
 So, my wifi card working on iwlwifi firmware. 
