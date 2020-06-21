@@ -38,9 +38,8 @@ So, my wifi card working on iwlwifi firmware.
 Next step is to check if this firmware exist in the system. 
 Go to page https://www.intel.com/content/www/us/en/support/articles/000005511/network-and-i-o/wireless-networking.html and find iwlwifi firmware 
 for your Network controller (in my case it is Intel Wireless AC 3165 and iwlwifi-7265-ucode which is equal to 3165 firmware).
-Check /lib/firmware/ folder to make shure that firmware exist. if so, check if it is downloaded with "lsmod | grep iwl" commmand. (Replace "iwl" with your module).
-If nothing is shown it means that driver for your wifi card firmware is not presented in the system. In order to find what driver is missing run "modinfo iwlwifi" and look at the "depends" line. In my output it was cfg80211 driver.  "Dpkg -S cfg80211" command shows 
-you that driver is located in /lib/modules/4.19.0-5-amd64/kernel/net/wireless/ folder. If folder is empty you need download and install driver.  
+Check /lib/firmware/ folder to make shure that firmware exist. if so, check if it is downloaded with "lsmod | grep iwl" command. (Replace "iwl" with your module).
+If nothing is shown it means that driver for your wifi card firmware is not presented in the system. In order to find what driver is missing run "modinfo iwlwifi" and look at the "depends" line. In my output it was cfg80211 driver.  "Dpkg -S cfg80211" command shows you that driver is located in /lib/modules/4.19.0-5-amd64/kernel/net/wireless/ folder. If folder is empty you need download and install driver.  
 
 The easiest way to install missing drivers is reinstalling kernel via Synaptic. To find kernel images run "apt-cache search linux-image". 
 
@@ -126,11 +125,11 @@ You'll need to copy from "psk=" to the end of the line, to put in your /etc/netw
 
 It's better to set up static IP address. Let's edit /etc/network/interfaces file:
 
-# The loopback network interface
+#The loopback network interface
 auto lo
 iface lo inet loopback
 
-# The primary network interface
+#The primary network interface
 auto wlo1
 allow-hotplug wlan0
 iface wlo1 inet static
@@ -158,11 +157,11 @@ I noticed that it's better don't make a daemon (don't add "B"). It's causing err
 
 If you prefer dynamic IP your /etc/network/interfaces file should look like that: 
 
-# The loopback network interface
+#The loopback network interface
 auto lo
 iface lo inet loopback
 
-# The primary network interface
+#The primary network interface
 auto wlo1
 allow-hotplug wlan0
 iface wlan0 inet dhcp
@@ -182,13 +181,13 @@ Reboot! You can run "systemctl restart networking" but it's not enough in some c
 Bring up your interface and verify the connection: 
 
 root@name:~# ifup wlp2s0
+
 root@name:~# iw wlp2s0 link
+
 root@name:~# ip a
 
 If your network interface is still "DOWN" try reinstall some packages. Open Synaptic and enter in search box "wireless" keyword. 
-At first reinstall "wireless-regdb" package. If it's not help try reinstall also "netbase", "wireless-tools", "iw", "crda", "firmware-iwlwifi", 
-"firmware-linux-free", "systemd", "systemd-sysv". If you use DHCP reinstall also isc-dhcp-client. If you still have no internet connection open router's home page: 192.168.1.1 and check if 
-you have desired device listed. Sometimes just open router's home page can help, i don't know why. 
+At first reinstall "wireless-regdb" package. If it's not help try reinstall also "netbase", "wireless-tools", "iw", "crda", "firmware-iwlwifi", "firmware-linux-free", "systemd", "systemd-sysv". If you use DHCP reinstall also isc-dhcp-client. If you still have no internet connection open router's home page: 192.168.1.1 and check if you have desired device listed. Sometimes just open router's home page can help, i don't know why. 
 
 You can check mistake in dmesg, journalctl, look if exclamation mark is present in network bios settings (f10 during boot). 
 
