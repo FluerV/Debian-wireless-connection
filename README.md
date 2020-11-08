@@ -249,9 +249,9 @@ Bring up your interface and verify the connection:
 
 
 ```
-root@name:~# ifup wlp2s0
+root@name:~# ifup wlo1
 
-root@name:~# iw wlp2s0 link
+root@name:~# iw wlo1 link
 
 root@name:~# ip a
 ```
