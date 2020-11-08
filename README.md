@@ -180,33 +180,23 @@ It's better to set up static IP address. Let's edit /etc/network/interfaces file
 #The loopback network interface
 
 auto lo
-
 iface lo inet loopback
 
 #The primary network interface
 
 auto wlo1
-
-allow-hotplug wlan0
-
+allow-hotplug wlo1
 iface wlo1 inet static
-
-        address 192.168.1.15
-	
-        netmask 255.255.255.0
-	
+        address 192.168.1.2
+        netmask 255.255.255.252
+        #netmask 255.255.255.0
         network 192.168.1.0
-	
         gateway 192.168.1.1
-	
-        broadcast 192.168.255.255
-	
+        #broadcast 192.168.1.255
+        broadcast 192.168.1.3
         dns-nameservers 192.168.1.1
-	
         #dns-nameservers 8.8.8.8 8.8.4.4
-	
         wpa-ssid myssid
-	
         wpa-psk numbers
 
 ```
@@ -236,13 +226,9 @@ iface lo inet loopback
 #The primary network interface
 
 auto wlo1
-
-allow-hotplug wlan0
-
-iface wlan0 inet dhcp
-
+allow-hotplug wlo1
+iface wlo1 inet dhcp
         wpa-ssid myssid
-	
         wpa-psk numbers
 ```
 
